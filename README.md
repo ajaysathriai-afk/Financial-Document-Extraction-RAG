@@ -4,52 +4,68 @@ AI-powered Financial Document Extraction and Retrieval-Augmented Generation (RAG
 
 ---
 
-## Live Demo
+## 🌐 Live Demo
 
 ### Frontend
+
 http://financial-rag-frontend-ajay.s3-website.ap-south-1.amazonaws.com
 
 ### Backend API
+
+http://13.235.115.168:8000
+
+### API Documentation
+
 http://13.235.115.168:8000/docs
 
 ---
 
-# Application Demo
+# 📸 Application Demo
 
 ![Financial RAG Demo](screenshots/demo.png)
 
 ---
 
-# Project Overview
+# 📖 Project Overview
 
-This platform automates the extraction of key financial metrics from annual reports (10-K PDFs) and enables intelligent question answering using Retrieval-Augmented Generation (RAG).
+This platform automates extraction of key financial metrics from annual reports (10-K PDFs) and enables intelligent financial question answering using Retrieval-Augmented Generation (RAG).
 
-Users can:
+### Core Capabilities
 
-- Upload financial reports
-- Extract structured financial metrics
-- Generate confidence scores
-- Store financial information
-- Create vector embeddings
-- Perform semantic search
-- Ask natural language questions
-- Receive GPT-4o generated answers grounded in document context
+* Upload Financial Reports
+* Extract Financial Metrics using GPT-4o
+* Validate Structured Output
+* Generate Confidence Scores
+* Create OpenAI Embeddings
+* Store Vectors in ChromaDB
+* Perform Semantic Search
+* Ask Natural Language Questions
+* Receive Context-Aware Answers
 
 ---
 
-# Architecture Diagram
+# 🏗️ Architecture Diagram
 
 ```mermaid
-flowchart LR
+flowchart TD
 
-A[Frontend UI<br>HTML CSS JavaScript]
---> B[FastAPI Backend]
+A[Frontend UI]
+    |
+    v
 
-B --> C[PDF Parser]
+B[FastAPI Backend]
+    |
+    v
 
-C --> D[Chunking Engine]
+C[PDF Parser]
+    |
+    v
 
-D --> E[Financial Section Detection]
+D[Chunking Engine]
+    |
+    v
+
+E[Financial Section Detection]
 
 E --> F[GPT-4o Extraction]
 
@@ -74,21 +90,28 @@ N --> O[Question Answering API]
 
 ---
 
-# End-to-End Workflow
+# 🔄 End-to-End Workflow
 
 ```mermaid
-flowchart LR
+flowchart TD
 
-A[Upload PDF]
---> B[PDF Parsing]
+A[Upload Financial Report]
+    |
+    v
 
-B --> C[Chunking]
+B[Parse PDF]
+    |
+    v
 
-C --> D[Financial Section Detection]
+C[Chunk Document]
+    |
+    v
 
-D --> E[GPT-4o Metric Extraction]
+D[Detect Financial Sections]
 
-E --> F[Validation]
+D --> E[GPT-4o Financial Extraction]
+
+E --> F[Validate Output]
 
 F --> G[Confidence Scoring]
 
@@ -96,80 +119,118 @@ G --> H[Return Financial Metrics]
 
 D --> I[Extract Financial Sections]
 
-I --> J[Generate Embeddings]
+I --> J[Generate OpenAI Embeddings]
 
 J --> K[Store in ChromaDB]
 
-K --> L[User Question]
+K --> L[User Asks Question]
 
 L --> M[Semantic Retrieval]
 
 M --> N[GPT-4o Answer Generation]
 
-N --> O[Display Answer]
+N --> O[Display Final Answer]
 ```
 
 ---
 
-# Key Features
+# ☁️ Deployment Architecture
 
-## Financial Document Extraction
+```mermaid
+flowchart TD
 
-- PDF Parsing
-- Intelligent Chunking
-- Financial Section Detection
-- GPT-4o Financial Metric Extraction
-- JSON Validation
-- Confidence Scoring
-- Structured Financial Output
+A[User]
+    |
+    v
+
+B[AWS S3 Static Website]
+    |
+    v
+
+C[Frontend UI]
+    |
+    v
+
+D[AWS EC2 Instance]
+    |
+    v
+
+E[Docker Container]
+    |
+    v
+
+F[FastAPI Backend]
+
+F --> G[GPT-4o]
+
+F --> H[OpenAI Embeddings]
+
+H --> I[(ChromaDB)]
+
+F --> J[(PostgreSQL)]
+```
+
+---
+
+# 🚀 Features
+
+## Financial Extraction
+
+* PDF Parsing
+* Intelligent Chunking
+* Financial Statement Detection
+* GPT-4o Structured Extraction
+* Validation Layer
+* Confidence Scoring
 
 ## Retrieval-Augmented Generation (RAG)
 
-- OpenAI Embeddings
-- ChromaDB Vector Database
-- Semantic Search
-- Context-Aware Retrieval
-- GPT-4o Answer Generation
+* OpenAI Embeddings
+* ChromaDB Vector Search
+* Semantic Retrieval
+* Context-Aware Responses
+* GPT-4o Question Answering
 
 ## Cloud Deployment
 
-- Docker Containerization
-- AWS EC2 Deployment
-- AWS S3 Static Website Hosting
-- GitHub Actions CI Pipeline
+* Dockerized Backend
+* AWS EC2 Deployment
+* AWS S3 Frontend Hosting
+* Public REST APIs
+* Production Ready
 
 ---
 
-# Technology Stack
+# 🛠️ Technology Stack
 
-| Layer | Technology |
-|---------|------------|
-| Frontend | HTML, CSS, JavaScript |
-| Backend | FastAPI |
-| LLM | GPT-4o |
-| Embeddings | OpenAI text-embedding-3-small |
-| Vector Database | ChromaDB |
-| Database | PostgreSQL |
-| Containerization | Docker |
-| Cloud | AWS EC2 |
-| Static Hosting | AWS S3 |
-| CI/CD | GitHub Actions |
+| Layer            | Technology                    |
+| ---------------- | ----------------------------- |
+| Frontend         | HTML, CSS, JavaScript         |
+| Backend          | FastAPI                       |
+| LLM              | GPT-4o                        |
+| Embeddings       | OpenAI text-embedding-3-small |
+| Vector Database  | ChromaDB                      |
+| Database         | PostgreSQL                    |
+| Containerization | Docker                        |
+| Cloud            | AWS EC2                       |
+| Static Hosting   | AWS S3                        |
+| CI/CD            | GitHub Actions                |
 
 ---
 
-# Project Structure
+# 📂 Project Structure
 
 ```text
 Financial-Document-Extraction-RAG
 │
 ├── app/
+│   ├── main.py
 │   ├── extractor.py
 │   ├── rag.py
-│   ├── repository.py
+│   ├── pdf_parser.py
 │   ├── validator.py
 │   ├── confidence.py
-│   ├── pdf_parser.py
-│   └── main.py
+│   └── repository.py
 │
 ├── frontend/
 │   ├── index.html
@@ -180,37 +241,28 @@ Financial-Document-Extraction-RAG
 │   └── demo.png
 │
 ├── tests/
-│   ├── test_db.py
-│   ├── test_pipeline.py
-│   ├── test_qa.py
-│   ├── test_rag.py
-│   ├── test_search.py
-│   ├── test_sections.py
-│   ├── debug_sections.py
-│   └── inspect_chunks.py
 │
 ├── Dockerfile
 ├── requirements.txt
-├── README.md
-└── .github/workflows
+└── README.md
 ```
 
 ---
 
-# Sample Financial Metrics Extracted
+# 📊 Example Financial Metrics
 
 The platform extracts:
 
-- Revenue
-- Gross Margin
-- Operating Income
-- Net Income
-- Total Assets
-- Total Liabilities
-- Shareholders Equity
-- Cash & Cash Equivalents
+* Revenue
+* Gross Margin
+* Operating Income
+* Net Income
+* Total Assets
+* Total Liabilities
+* Shareholders Equity
+* Cash & Cash Equivalents
 
-Example Output:
+Example:
 
 ```json
 {
@@ -231,9 +283,7 @@ Example Output:
 
 ---
 
-# Sample Questions
-
-Users can ask questions such as:
+# 💬 Sample Questions
 
 ```text
 What was Apple's revenue in 2024?
@@ -251,52 +301,23 @@ What was Apple's operating income in fiscal year 2024?
 
 ---
 
-# Deployment Architecture
+# 🔮 Future Enhancements
 
-```mermaid
-flowchart LR
-
-A[User]
-
-A --> B[AWS S3 Static Website]
-
-B --> C[Frontend UI]
-
-C --> D[AWS EC2]
-
-D --> E[Docker Container]
-
-E --> F[FastAPI Backend]
-
-F --> G[GPT-4o]
-
-F --> H[OpenAI Embeddings]
-
-H --> I[(ChromaDB)]
-
-F --> J[(PostgreSQL)]
-```
+* Multi-Document Analysis
+* Multi-Company Comparison
+* Financial Trend Analysis
+* Interactive Dashboards
+* Advanced RAG Strategies
+* Financial Ratio Calculations
+* Production Monitoring
 
 ---
 
-# Future Enhancements
-
-- Multi-document support
-- Financial trend analysis
-- Multi-company comparison
-- Interactive dashboards
-- Advanced RAG retrieval strategies
-- Financial ratio calculations
-- Cloud-native vector databases
-- Production monitoring and observability
-
----
-
-# Author
+# 👨‍💻 Author
 
 **Ajay Kumar Sathri**
 
-MS in Computer Science Engineering  
+MS in Computer Science Engineering
 University of North Texas
 
 GitHub:
@@ -304,22 +325,18 @@ https://github.com/ajaysathriai-afk
 
 ---
 
-# Project Status
+# ✅ Project Status
 
-✅ Financial Extraction Working
+* Financial Extraction Working
+* GPT-4o Integrated
+* OpenAI Embeddings Integrated
+* ChromaDB Working
+* RAG Pipeline Working
+* Dockerized
+* AWS EC2 Deployed
+* AWS S3 Hosted
+* End-to-End Tested
+* Portfolio Ready
 
-✅ RAG Pipeline Working
-
-✅ OpenAI Embeddings Integrated
-
-✅ ChromaDB Vector Search Working
-
-✅ Dockerized
-
-✅ AWS EC2 Deployed
-
-✅ AWS S3 Hosted Frontend
-
-✅ GitHub Actions CI Pipeline
-
-✅ End-to-End Tested
+```
+```
