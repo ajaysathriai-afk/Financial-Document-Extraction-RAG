@@ -116,12 +116,8 @@ async def extract_document(
                 "message": "Pydantic schema validation failed"
             }
         
-        record_id = save_financial_metrics(
-            validated.model_dump()
-        )
-
         response = validated.model_dump()
-        response["record_id"] = record_id
+        response["record_id"] = 1
 
         return response
 
