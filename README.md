@@ -1,370 +1,298 @@
 # Financial Document Extraction & RAG Platform
 
-AI-powered Financial Intelligence Platform that automatically extracts financial metrics from annual reports (10-K PDFs) and enables natural language financial question answering using Retrieval-Augmented Generation (RAG).
-
-Built using FastAPI, GPT-4o, OpenAI Embeddings, ChromaDB, Docker, AWS EC2, and AWS S3.
+AI-powered Financial Document Extraction and Retrieval-Augmented Generation (RAG) platform built with GPT-4o, OpenAI Embeddings, ChromaDB, FastAPI, Docker, PostgreSQL, and AWS.
 
 ---
 
-# 🌐 Live Deployment
+## Live Demo
 
-## Frontend
-
+### Frontend
 http://financial-rag-frontend-ajay.s3-website.ap-south-1.amazonaws.com
 
-## Backend API
-
-http://13.235.115.168:8000
-
-## API Documentation
-
+### Backend API
 http://13.235.115.168:8000/docs
 
 ---
 
-# 🚀 Features
+## Project Overview
 
-### Financial Metric Extraction
+This platform automates the extraction of key financial metrics from annual reports (10-K PDFs) and enables intelligent question answering using Retrieval-Augmented Generation (RAG).
 
-Automatically extracts:
+Users can:
 
-* Revenue
-* Gross Margin
-* Operating Income
-* Net Income
-* Total Assets
-* Total Liabilities
-* Shareholders Equity
-* Cash & Cash Equivalents
-
----
-
-### Retrieval-Augmented Generation (RAG)
-
-* Financial section detection
-* OpenAI Embeddings
-* ChromaDB Vector Search
-* Semantic Retrieval
-* GPT-4o Question Answering
-* Context-Aware Responses
+- Upload financial reports
+- Extract structured financial metrics
+- Store financial data
+- Generate vector embeddings
+- Perform semantic search
+- Ask natural language questions
+- Receive GPT-4o-generated answers grounded in document context
 
 ---
 
-### Production Deployment
-
-* Dockerized Application
-* AWS EC2 Hosting
-* AWS S3 Frontend
-* Public REST APIs
-* Persistent ChromaDB Storage
-
----
-
-# 🏗️ System Architecture
-
-```mermaid
-flowchart TD
-
-A[User Browser]
-
-A --> B[AWS S3 Frontend]
-
-B --> C[FastAPI Backend]
-
-C --> D[PDF Upload]
-
-D --> E[PyMuPDF Parser]
-
-E --> F[Financial Statement Detection]
-
-F --> G[GPT-4o Financial Extraction]
-
-F --> H[Financial Sections]
-
-H --> I[OpenAI Embeddings]
-
-I --> J[ChromaDB Vector Store]
-
-J --> K[RAG Retrieval Engine]
-
-K --> L[GPT-4o Question Answering]
-
-L --> A
-```
-
----
-
-# 🧠 RAG Architecture
+# Architecture Diagram
 
 ```mermaid
 flowchart LR
 
-A[Financial PDF]
+A[Frontend UI<br/>HTML CSS JavaScript] --> B[FastAPI Backend]
 
-A --> B[PDF Parsing]
+B --> C[PDF Parser]
+C --> D[Chunking Engine]
 
-B --> C[Financial Sections]
+D --> E[Financial Section Detection]
 
-C --> D[OpenAI Embeddings]
+E --> F[GPT-4o Extraction]
 
-D --> E[ChromaDB]
+F --> G[Validation Layer]
 
-F[User Question]
+G --> H[Confidence Scoring]
 
-F --> G[Query Embedding]
+H --> I[PostgreSQL]
 
-G --> E
+E --> J[Section Extraction]
 
-E --> H[Relevant Context]
+J --> K[OpenAI Embeddings]
 
-H --> I[GPT-4o]
+K --> L[ChromaDB Vector Store]
 
-I --> J[Financial Answer]
+L --> M[RAG Retrieval]
+
+M --> N[GPT-4o Answer Generation]
+
+N --> O[Question Answering API]
+
 ```
 
 ---
 
-# ☁️ AWS Production Architecture
+# End-to-End Workflow
 
 ```mermaid
-flowchart TD
+sequenceDiagram
 
-A[AWS S3 Static Website]
+participant User
+participant Frontend
+participant FastAPI
+participant GPT4o
+participant ChromaDB
 
-A --> B[AWS EC2 Ubuntu Server]
+User->>Frontend: Upload Financial Report
 
-subgraph Docker Container
+Frontend->>FastAPI: POST /extract
 
-B --> C[FastAPI]
+FastAPI->>FastAPI: Parse PDF
 
-C --> D[PyMuPDF]
+FastAPI->>FastAPI: Chunk Document
 
-C --> E[GPT-4o]
+FastAPI->>FastAPI: Detect Financial Sections
 
-C --> F[OpenAI Embeddings]
+FastAPI->>GPT4o: Extract Metrics
 
-C --> G[ChromaDB]
+GPT4o-->>FastAPI: Financial JSON
 
-end
+FastAPI->>FastAPI: Validate Data
+
+FastAPI->>FastAPI: Calculate Confidence
+
+FastAPI->>ChromaDB: Store Section Embeddings
+
+FastAPI-->>Frontend: Return Metrics
+
+User->>Frontend: Ask Question
+
+Frontend->>FastAPI: POST /ask
+
+FastAPI->>ChromaDB: Retrieve Relevant Context
+
+ChromaDB-->>FastAPI: Matching Sections
+
+FastAPI->>GPT4o: Generate Answer
+
+GPT4o-->>FastAPI: Response
+
+FastAPI-->>Frontend: Final Answer
+
 ```
 
 ---
 
-# 🔄 End-to-End Workflow
+# Features
 
-```mermaid
-flowchart TD
+### Financial Document Extraction
 
-A[Upload Financial Report PDF]
+- PDF Parsing
+- Chunking Pipeline
+- Financial Section Detection
+- GPT-4o Structured Extraction
+- JSON Output Validation
+- Confidence Scoring
 
-A --> B[PDF Parsing]
+### Retrieval-Augmented Generation
 
-B --> C[Financial Statement Detection]
+- OpenAI Embeddings
+- ChromaDB Vector Database
+- Semantic Search
+- Context-Aware Question Answering
+- GPT-4o Response Generation
 
-C --> D[GPT-4o Metric Extraction]
+### Deployment
 
-D --> E[Schema Validation]
+- Docker Containerization
+- AWS EC2 Backend Deployment
+- AWS S3 Static Frontend Hosting
+- GitHub Actions CI Pipeline
 
-E --> F[Confidence Scoring]
+---
 
-F --> G[Financial Section Extraction]
+# Technology Stack
 
-G --> H[OpenAI Embeddings]
+| Layer | Technology |
+|---------|------------|
+| Frontend | HTML, CSS, JavaScript |
+| Backend | FastAPI |
+| LLM | GPT-4o |
+| Embeddings | OpenAI text-embedding-3-small |
+| Vector Database | ChromaDB |
+| Database | PostgreSQL |
+| Containerization | Docker |
+| Cloud | AWS EC2 |
+| Static Hosting | AWS S3 |
+| CI/CD | GitHub Actions |
 
-H --> I[ChromaDB Storage]
+---
 
-J[User Question]
+# Project Structure
 
-J --> K[Query Embedding]
-
-K --> I
-
-I --> L[Semantic Retrieval]
-
-L --> M[Relevant Financial Context]
-
-M --> N[GPT-4o Response Generation]
-
-N --> O[Financial Insight Returned]
+```text
+Financial-Document-Extraction-RAG
+│
+├── app/
+│   ├── extractor.py
+│   ├── rag.py
+│   ├── repository.py
+│   ├── validator.py
+│   ├── confidence.py
+│   ├── pdf_parser.py
+│   └── main.py
+│
+├── frontend/
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+│
+├── screenshots/
+│   └── demo.png
+│
+├── tests/
+│   ├── test_db.py
+│   ├── test_pipeline.py
+│   ├── test_qa.py
+│   ├── test_rag.py
+│   ├── test_search.py
+│   ├── test_sections.py
+│   ├── debug_sections.py
+│   └── inspect_chunks.py
+│
+├── Dockerfile
+├── requirements.txt
+├── README.md
+└── .github/workflows
 ```
 
 ---
 
-# 📸 Demo
+# Application Demo
 
 ![Financial RAG Demo](screenshots/demo.png)
 
 ---
 
-# 🛠️ Technology Stack
+# Sample Capabilities
 
-## Frontend
+### Financial Metric Extraction
 
-* HTML
-* CSS
-* JavaScript
-* AWS S3
+Extracts:
 
-### Backend
+- Revenue
+- Gross Margin
+- Operating Income
+- Net Income
+- Total Assets
+- Total Liabilities
+- Shareholders Equity
+- Cash & Cash Equivalents
 
-* Python
-* FastAPI
-* Pydantic
+### Question Answering
 
-### AI & LLM
-
-* GPT-4o
-* OpenAI API
-* Prompt Engineering
-
-### Embeddings
-
-* OpenAI text-embedding-3-small
-
-### Vector Database
-
-* ChromaDB
-
-### Document Processing
-
-* PyMuPDF
-
-### Infrastructure
-
-* Docker
-* AWS EC2
-* AWS S3
-* Ubuntu Linux
-
----
-
-# 📡 API Endpoints
-
-## Health Check
-
-```http
-GET /
-```
-
----
-
-## Financial Extraction
-
-```http
-POST /extract
-```
-
-Upload a Financial PDF and receive structured financial metrics.
-
----
-
-## Question Answering
-
-```http
-POST /ask
-```
-
-Example:
-
-```json
-{
-  "question": "What was Apple's revenue in 2024?"
-}
-```
-
----
-
-# 📂 Project Structure
+Example Questions:
 
 ```text
-Financial-Document-Extraction-RAG
+What was Apple's revenue in 2024?
 
-├── app
-│   ├── extractor.py
-│   ├── rag.py
-│   ├── pdf_parser.py
-│   ├── confidence.py
-│   ├── validator.py
-│   ├── repository.py
-│   ├── database.py
-│   └── main.py
-│
-├── frontend
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
-│
-├── chroma_db
-├── screenshots
-│   └── demo.png
-│
-├── Dockerfile
-├── requirements.txt
-└── README.md
+What were Apple's total liabilities?
+
+What was shareholder equity in 2024?
+
+How much cash was used in financing activities?
+
+What cash balance did Apple end fiscal 2024 with?
 ```
 
 ---
 
-# 🎯 Key Achievements
+# Deployment Architecture
 
-* Built an End-to-End Financial Intelligence Platform
-* Developed GPT-4o powered Financial Metric Extraction
-* Implemented Retrieval-Augmented Generation (RAG)
-* Integrated OpenAI Embeddings with ChromaDB
-* Developed Semantic Search over Financial Statements
-* Built Natural Language Financial Question Answering
-* Containerized using Docker
-* Deployed Backend on AWS EC2
-* Hosted Frontend on AWS S3
-* Implemented Validation & Confidence Scoring Pipelines
-* Solved Real-World Deployment Challenges involving Docker, AWS Networking, CORS, OpenAI APIs, and Vector Database Persistence
-
----
-
-# 🔮 Future Enhancements
-
-* Multi-Document Support
-* Multi-Company Analysis
-* Historical Financial Trends
-* Financial Dashboard & Visualizations
-* Pinecone Integration
-* Authentication & Authorization
-* Role-Based Access Control
-* Financial Analytics Engine
+```text
+User
+ ↓
+AWS S3 Static Website
+ ↓
+Frontend UI
+ ↓
+AWS EC2 Instance
+ ↓
+Docker Container
+ ↓
+FastAPI Application
+ ↓
+GPT-4o + OpenAI Embeddings
+ ↓
+ChromaDB
+```
 
 ---
 
-# 📈 Project Status
+# Future Enhancements
 
-### Version 1.0
-
-✅ Production Deployed
-
-✅ AWS Hosted
-
-✅ Dockerized
-
-✅ GPT-4o Integrated
-
-✅ RAG Enabled
-
-✅ OpenAI Embeddings
-
-✅ ChromaDB Vector Search
-
-✅ Portfolio Ready
+- Multi-document support
+- Historical trend analysis
+- Financial ratio calculations
+- Interactive dashboards
+- Multi-company comparison
+- Advanced RAG retrieval strategies
+- Cloud-native vector database
 
 ---
 
-# 👨‍💻 Author
+# Author
 
-### Ajay Kumar Sathri
+Ajay Kumar Sathri
 
-AI Engineer | Generative AI | Machine Learning | Full Stack Development
+MS Computer Science Engineering
+University of North Texas
 
 GitHub:
 https://github.com/ajaysathriai-afk
 
 ---
 
-⭐ If you found this project useful, consider giving it a star.
+## Project Status
+
+Production Ready
+
+- Financial Extraction Working
+- RAG Pipeline Working
+- Dockerized
+- AWS Deployed
+- End-to-End Tested
