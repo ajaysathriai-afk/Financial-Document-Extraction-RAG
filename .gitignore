@@ -1,0 +1,12 @@
+venv/
+.env
+
+__pycache__/
+*.pyc
+
+chroma_db/
+uploads/
+
+financial_metrics.db
+
+.DS_Store
