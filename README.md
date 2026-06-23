@@ -1,6 +1,6 @@
 # Financial Document Extraction & RAG Platform
 
-AI-powered Financial Document Extraction and Retrieval-Augmented Generation (RAG) platform built with GPT-4o, OpenAI Embeddings, ChromaDB, FastAPI, Docker, PostgreSQL, and AWS.
+AI-powered Financial Document Extraction and Retrieval-Augmented Generation (RAG) platform built using GPT-4o, OpenAI Embeddings, ChromaDB, FastAPI, Docker, PostgreSQL, and AWS.
 
 ---
 
@@ -14,7 +14,13 @@ http://13.235.115.168:8000/docs
 
 ---
 
-## Project Overview
+# Application Demo
+
+![Financial RAG Demo](screenshots/demo.png)
+
+---
+
+# Project Overview
 
 This platform automates the extraction of key financial metrics from annual reports (10-K PDFs) and enables intelligent question answering using Retrieval-Augmented Generation (RAG).
 
@@ -22,11 +28,12 @@ Users can:
 
 - Upload financial reports
 - Extract structured financial metrics
-- Store financial data
-- Generate vector embeddings
+- Generate confidence scores
+- Store financial information
+- Create vector embeddings
 - Perform semantic search
 - Ask natural language questions
-- Receive GPT-4o-generated answers grounded in document context
+- Receive GPT-4o generated answers grounded in document context
 
 ---
 
@@ -35,9 +42,11 @@ Users can:
 ```mermaid
 flowchart LR
 
-A[Frontend UI<br/>HTML CSS JavaScript] --> B[FastAPI Backend]
+A[Frontend UI<br>HTML CSS JavaScript]
+--> B[FastAPI Backend]
 
 B --> C[PDF Parser]
+
 C --> D[Chunking Engine]
 
 D --> E[Financial Section Detection]
@@ -48,20 +57,19 @@ F --> G[Validation Layer]
 
 G --> H[Confidence Scoring]
 
-H --> I[PostgreSQL]
+H --> I[(PostgreSQL)]
 
 E --> J[Section Extraction]
 
 J --> K[OpenAI Embeddings]
 
-K --> L[ChromaDB Vector Store]
+K --> L[(ChromaDB)]
 
 L --> M[RAG Retrieval]
 
 M --> N[GPT-4o Answer Generation]
 
 N --> O[Question Answering API]
-
 ```
 
 ---
@@ -69,78 +77,65 @@ N --> O[Question Answering API]
 # End-to-End Workflow
 
 ```mermaid
-sequenceDiagram
+flowchart LR
 
-participant User
-participant Frontend
-participant FastAPI
-participant GPT4o
-participant ChromaDB
+A[Upload PDF]
+--> B[PDF Parsing]
 
-User->>Frontend: Upload Financial Report
+B --> C[Chunking]
 
-Frontend->>FastAPI: POST /extract
+C --> D[Financial Section Detection]
 
-FastAPI->>FastAPI: Parse PDF
+D --> E[GPT-4o Metric Extraction]
 
-FastAPI->>FastAPI: Chunk Document
+E --> F[Validation]
 
-FastAPI->>FastAPI: Detect Financial Sections
+F --> G[Confidence Scoring]
 
-FastAPI->>GPT4o: Extract Metrics
+G --> H[Return Financial Metrics]
 
-GPT4o-->>FastAPI: Financial JSON
+D --> I[Extract Financial Sections]
 
-FastAPI->>FastAPI: Validate Data
+I --> J[Generate Embeddings]
 
-FastAPI->>FastAPI: Calculate Confidence
+J --> K[Store in ChromaDB]
 
-FastAPI->>ChromaDB: Store Section Embeddings
+K --> L[User Question]
 
-FastAPI-->>Frontend: Return Metrics
+L --> M[Semantic Retrieval]
 
-User->>Frontend: Ask Question
+M --> N[GPT-4o Answer Generation]
 
-Frontend->>FastAPI: POST /ask
-
-FastAPI->>ChromaDB: Retrieve Relevant Context
-
-ChromaDB-->>FastAPI: Matching Sections
-
-FastAPI->>GPT4o: Generate Answer
-
-GPT4o-->>FastAPI: Response
-
-FastAPI-->>Frontend: Final Answer
-
+N --> O[Display Answer]
 ```
 
 ---
 
-# Features
+# Key Features
 
-### Financial Document Extraction
+## Financial Document Extraction
 
 - PDF Parsing
-- Chunking Pipeline
+- Intelligent Chunking
 - Financial Section Detection
-- GPT-4o Structured Extraction
-- JSON Output Validation
+- GPT-4o Financial Metric Extraction
+- JSON Validation
 - Confidence Scoring
+- Structured Financial Output
 
-### Retrieval-Augmented Generation
+## Retrieval-Augmented Generation (RAG)
 
 - OpenAI Embeddings
 - ChromaDB Vector Database
 - Semantic Search
-- Context-Aware Question Answering
-- GPT-4o Response Generation
+- Context-Aware Retrieval
+- GPT-4o Answer Generation
 
-### Deployment
+## Cloud Deployment
 
 - Docker Containerization
-- AWS EC2 Backend Deployment
-- AWS S3 Static Frontend Hosting
+- AWS EC2 Deployment
+- AWS S3 Static Website Hosting
 - GitHub Actions CI Pipeline
 
 ---
@@ -202,17 +197,9 @@ Financial-Document-Extraction-RAG
 
 ---
 
-# Application Demo
+# Sample Financial Metrics Extracted
 
-![Financial RAG Demo](screenshots/demo.png)
-
----
-
-# Sample Capabilities
-
-### Financial Metric Extraction
-
-Extracts:
+The platform extracts:
 
 - Revenue
 - Gross Margin
@@ -223,9 +210,30 @@ Extracts:
 - Shareholders Equity
 - Cash & Cash Equivalents
 
-### Question Answering
+Example Output:
 
-Example Questions:
+```json
+{
+  "company_name": "Apple Inc.",
+  "fiscal_year": 2024,
+  "revenue": 391035,
+  "gross_margin": 180683,
+  "operating_income": 123216,
+  "net_income": 93736,
+  "total_assets": 364980,
+  "total_liabilities": 308030,
+  "shareholders_equity": 56950,
+  "cash_and_cash_equivalents": 29943,
+  "confidence_score": 1,
+  "review_required": false
+}
+```
+
+---
+
+# Sample Questions
+
+Users can ask questions such as:
 
 ```text
 What was Apple's revenue in 2024?
@@ -237,28 +245,36 @@ What was shareholder equity in 2024?
 How much cash was used in financing activities?
 
 What cash balance did Apple end fiscal 2024 with?
+
+What was Apple's operating income in fiscal year 2024?
 ```
 
 ---
 
 # Deployment Architecture
 
-```text
-User
- ↓
-AWS S3 Static Website
- ↓
-Frontend UI
- ↓
-AWS EC2 Instance
- ↓
-Docker Container
- ↓
-FastAPI Application
- ↓
-GPT-4o + OpenAI Embeddings
- ↓
-ChromaDB
+```mermaid
+flowchart LR
+
+A[User]
+
+A --> B[AWS S3 Static Website]
+
+B --> C[Frontend UI]
+
+C --> D[AWS EC2]
+
+D --> E[Docker Container]
+
+E --> F[FastAPI Backend]
+
+F --> G[GPT-4o]
+
+F --> H[OpenAI Embeddings]
+
+H --> I[(ChromaDB)]
+
+F --> J[(PostgreSQL)]
 ```
 
 ---
@@ -266,20 +282,21 @@ ChromaDB
 # Future Enhancements
 
 - Multi-document support
-- Historical trend analysis
-- Financial ratio calculations
-- Interactive dashboards
+- Financial trend analysis
 - Multi-company comparison
+- Interactive dashboards
 - Advanced RAG retrieval strategies
-- Cloud-native vector database
+- Financial ratio calculations
+- Cloud-native vector databases
+- Production monitoring and observability
 
 ---
 
 # Author
 
-Ajay Kumar Sathri
+**Ajay Kumar Sathri**
 
-MS Computer Science Engineering
+MS in Computer Science Engineering  
 University of North Texas
 
 GitHub:
@@ -287,12 +304,22 @@ https://github.com/ajaysathriai-afk
 
 ---
 
-## Project Status
+# Project Status
 
-Production Ready
+✅ Financial Extraction Working
 
-- Financial Extraction Working
-- RAG Pipeline Working
-- Dockerized
-- AWS Deployed
-- End-to-End Tested
+✅ RAG Pipeline Working
+
+✅ OpenAI Embeddings Integrated
+
+✅ ChromaDB Vector Search Working
+
+✅ Dockerized
+
+✅ AWS EC2 Deployed
+
+✅ AWS S3 Hosted Frontend
+
+✅ GitHub Actions CI Pipeline
+
+✅ End-to-End Tested
