@@ -55,14 +55,24 @@ def store_sections(sections):
         for doc in documents
     ]
 
+    # Remove old sections if they already exist
+    try:
+        collection.delete(
+            ids=[
+                "operations",
+                "balance_sheet",
+                "cash_flow"
+            ]
+        )
+    except:
+        pass
+
     collection.add(
         ids=ids,
         documents=documents,
         metadatas=metadatas,
         embeddings=embeddings
     )
-
-    return len(documents)
 
 
 

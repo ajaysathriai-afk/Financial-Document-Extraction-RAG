@@ -1,19 +1,28 @@
 from pydantic import BaseModel
-from app.rag import answer_question
+from app.rag import (
+    answer_question,
+    store_sections
+)
+
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import (
     FastAPI,
     UploadFile,
     File
 )
+
 import json
+import os
+
 from app.validator import validate_extraction
 from app.pdf_parser import extract_text_from_pdf
 from app.repository import save_financial_metrics
+
 from app.extractor import (
     chunk_text,
     find_financial_chunks,
-    extract_financial_metrics
+    extract_financial_metrics,
+    extract_financial_sections
 )
 
 app = FastAPI(
@@ -31,7 +40,6 @@ app.add_middleware(
 
 class QuestionRequest(BaseModel):
     question: str
-
 
 
 @app.get("/")
@@ -55,46 +63,58 @@ def ask_question(request: QuestionRequest):
     }
 
 
-
 @app.post("/extract")
 async def extract_document(
     file: UploadFile = File(...)
 ):
-    import os
 
-    os.makedirs("uploads", exist_ok=True)
+    os.makedirs(
+        "uploads",
+        exist_ok=True
+    )
 
     file_path = f"uploads/{file.filename}"
 
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
-    # Step 1: Parse PDF
-    text = extract_text_from_pdf(file_path)
 
-    # Step 2: Chunking
+    # STEP 1: PDF PARSE
+
+    text = extract_text_from_pdf(
+        file_path
+    )
+
+    # STEP 2: STORE RAG SECTIONS
+
+    sections = extract_financial_sections(
+        text
+    )
+
+    if sections:
+        store_sections(sections)
+
+    # STEP 3: CHUNKING
+
     chunks = chunk_text(text)
 
-    # Step 3: Financial Section Detection
-    financial_chunks = find_financial_chunks(chunks)
-    from app.rag import store_sections
+    # STEP 4: FIND FINANCIAL CHUNKS
 
-    sections = {}
-
-    for section_name, content in financial_chunks:
-        sections[section_name] = content
-
-    store_sections(sections)
+    financial_chunks = find_financial_chunks(
+        chunks
+    )
 
     if not financial_chunks:
         return {
             "error": "No financial sections found"
         }
 
-    # Step 4: GPT Extraction
+    # STEP 5: GPT EXTRACTION
+
     combined_context = "\n\n".join(
         chunk[1]
         for chunk in financial_chunks
     )
+
     result = extract_financial_metrics(
         combined_context
     )
@@ -109,22 +129,33 @@ async def extract_document(
         )
 
         data = json.loads(cleaned)
-        from app.confidence import calculate_confidence
 
-        confidence = calculate_confidence(data)
+        from app.confidence import (
+            calculate_confidence
+        )
+
+        confidence = calculate_confidence(
+            data
+        )
 
         data["confidence_score"] = confidence
-        data["review_required"] = confidence < 0.80
+        data["review_required"] = (
+            confidence < 0.80
+        )
 
-        validated = validate_extraction(data)
+        validated = validate_extraction(
+            data
+        )
 
         if validated is None:
+
             return {
                 "status": "validation_failed",
                 "message": "Pydantic schema validation failed"
             }
-        
+
         response = validated.model_dump()
+
         response["record_id"] = 1
 
         return response
