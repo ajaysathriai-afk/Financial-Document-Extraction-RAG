@@ -11,7 +11,7 @@ async function extractMetrics() {
     );
 
     const response = await fetch(
-        "http://127.0.0.1:8000/extract",
+        "http://13.235.115.168:8000/extract",
         {
             method: "POST",
             body: formData
@@ -31,7 +31,7 @@ async function askQuestion() {
         document.getElementById("question").value;
 
     const response = await fetch(
-        "http://127.0.0.1:8000/ask",
+        "http://13.235.115.168:8000/ask",
         {
             method: "POST",
             headers: {

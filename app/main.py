@@ -60,6 +60,10 @@ def ask_question(request: QuestionRequest):
 async def extract_document(
     file: UploadFile = File(...)
 ):
+    import os
+
+    os.makedirs("uploads", exist_ok=True)
+
     file_path = f"uploads/{file.filename}"
 
     with open(file_path, "wb") as buffer:
