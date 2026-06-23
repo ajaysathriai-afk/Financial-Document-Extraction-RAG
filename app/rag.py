@@ -77,16 +77,17 @@ def search_documents(query):
 from openai import OpenAI
 import os
 
-client_openai = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY")
-)
+def get_openai_client():
+    return OpenAI(
+        api_key=os.getenv("OPENAI_API_KEY")
+    )
 
 def answer_question(question):
 
     docs = search_documents(question)
 
     context = "\n\n".join(docs)
-
+    client_openai = get_openai_client()
     response = client_openai.chat.completions.create(
         model="gpt-4o",
         temperature=0,
