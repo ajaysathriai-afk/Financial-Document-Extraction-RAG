@@ -76,6 +76,14 @@ async def extract_document(
 
     # Step 3: Financial Section Detection
     financial_chunks = find_financial_chunks(chunks)
+    from app.rag import store_sections
+
+    sections = {}
+
+    for section_name, content in financial_chunks:
+        sections[section_name] = content
+
+    store_sections(sections)
 
     if not financial_chunks:
         return {

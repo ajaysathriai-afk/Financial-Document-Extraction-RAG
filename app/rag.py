@@ -85,7 +85,7 @@ def search_documents(query):
     else:
 
         results = collection.query(
-            query_embeddings=[query_embedding.tolist()],
+            query_embeddings=[query_embedding],
             n_results=1
         )
 
