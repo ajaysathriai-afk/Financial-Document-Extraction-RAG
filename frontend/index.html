@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Financial RAG Platform</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Financial Document Extraction & RAG Platform</h1>
+
+    <div class="card">
+
+        <h2>Upload Financial Report</h2>
+
+        <input type="file" id="pdfFile">
+
+        <button onclick="extractMetrics()">
+            Extract Metrics
+        </button>
+
+        <pre id="metrics"></pre>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Ask Questions</h2>
+
+        <input
+            type="text"
+            id="question"
+            placeholder="What was Apple's revenue in 2024?"
+        >
+
+        <button onclick="askQuestion()">
+            Ask
+        </button>
+
+        <div id="answer"></div>
+
+    </div>
+
+</div>
+
+<script src="app.js"></script>
+
+</body>
+</html>

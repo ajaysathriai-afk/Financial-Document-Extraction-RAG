@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 from app.rag import answer_question
-
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import (
     FastAPI,
     UploadFile,
@@ -19,6 +19,15 @@ from app.extractor import (
 app = FastAPI(
     title="Financial Document Extraction API"
 )
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 class QuestionRequest(BaseModel):
     question: str
@@ -70,8 +79,12 @@ async def extract_document(
         }
 
     # Step 4: GPT Extraction
+    combined_context = "\n\n".join(
+        chunk[1]
+        for chunk in financial_chunks
+    )
     result = extract_financial_metrics(
-        financial_chunks[0][1]
+        combined_context
     )
 
     try:
