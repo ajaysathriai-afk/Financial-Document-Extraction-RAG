@@ -3,7 +3,24 @@ from dotenv import load_dotenv
 load_dotenv()
 
 import chromadb
-from sentence_transformers import SentenceTransformer
+from openai import OpenAI
+import os
+
+def get_openai_client():
+    return OpenAI(
+        api_key=os.getenv("OPENAI_API_KEY")
+    )
+
+def get_embedding(text):
+
+    client = get_openai_client()
+
+    response = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=text
+    )
+
+    return response.data[0].embedding
 
 client = chromadb.PersistentClient(
     path="./chroma_db"
@@ -13,9 +30,6 @@ collection = client.get_or_create_collection(
     name="financial_documents"
 )
 
-model = SentenceTransformer(
-    "all-MiniLM-L6-v2"
-)
 
 
 def store_sections(sections):
@@ -36,13 +50,16 @@ def store_sections(sections):
             }
         )
 
-    embeddings = model.encode(documents)
+    embeddings = [
+        get_embedding(doc)
+        for doc in documents
+    ]
 
     collection.add(
         ids=ids,
         documents=documents,
         metadatas=metadatas,
-        embeddings=embeddings.tolist()
+        embeddings=embeddings
     )
 
     return len(documents)
@@ -53,12 +70,12 @@ def search_documents(query):
 
     target_section = detect_section(query)
 
-    query_embedding = model.encode([query])[0]
+    query_embedding = get_embedding(query)
 
     if target_section:
 
         results = collection.query(
-            query_embeddings=[query_embedding.tolist()],
+            query_embeddings=[query_embedding],
             n_results=1,
             where={
                 "section": target_section
