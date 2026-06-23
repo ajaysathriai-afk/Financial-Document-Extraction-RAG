@@ -1,328 +1,370 @@
 # Financial Document Extraction & RAG Platform
 
-An AI-powered platform that automatically extracts key financial metrics from annual reports (10-K PDFs) and enables natural language question answering using Retrieval-Augmented Generation (RAG).
+AI-powered Financial Intelligence Platform that automatically extracts financial metrics from annual reports (10-K PDFs) and enables natural language financial question answering using Retrieval-Augmented Generation (RAG).
 
-The system combines Large Language Models (GPT-4o), OpenAI Embeddings, ChromaDB Vector Search, and FastAPI to transform unstructured financial reports into an interactive financial intelligence platform.
-
----
-
-## Project Overview
-
-Financial reports often contain hundreds of pages of complex financial statements and disclosures. Manually searching for important metrics such as revenue, net income, liabilities, shareholder equity, or cash flow can be time-consuming.
-
-This platform automates the process by:
-
-- Uploading annual reports (PDF)
-- Extracting financial metrics using GPT-4o
-- Detecting key financial statements
-- Generating vector embeddings
-- Storing financial knowledge in ChromaDB
-- Answering natural language questions using RAG
+Built using FastAPI, GPT-4o, OpenAI Embeddings, ChromaDB, Docker, AWS EC2, and AWS S3.
 
 ---
 
-## Key Features
+# 🌐 Live Deployment
+
+## Frontend
+
+http://financial-rag-frontend-ajay.s3-website.ap-south-1.amazonaws.com
+
+## Backend API
+
+http://13.235.115.168:8000
+
+## API Documentation
+
+http://13.235.115.168:8000/docs
+
+---
+
+# 🚀 Features
 
 ### Financial Metric Extraction
 
 Automatically extracts:
 
-- Revenue
-- Gross Margin
-- Operating Income
-- Net Income
-- Total Assets
-- Total Liabilities
-- Shareholders Equity
-- Cash & Cash Equivalents
+* Revenue
+* Gross Margin
+* Operating Income
+* Net Income
+* Total Assets
+* Total Liabilities
+* Shareholders Equity
+* Cash & Cash Equivalents
 
 ---
 
-### AI-Powered Question Answering
+### Retrieval-Augmented Generation (RAG)
 
-Ask questions such as:
-
-```text
-What was Apple's revenue in 2024?
-
-What were total liabilities in 2024?
-
-What was shareholder equity?
-
-How much cash was used in financing activities?
-```
-
-and receive contextual answers directly from the uploaded report.
+* Financial section detection
+* OpenAI Embeddings
+* ChromaDB Vector Search
+* Semantic Retrieval
+* GPT-4o Question Answering
+* Context-Aware Responses
 
 ---
 
-### Retrieval Augmented Generation (RAG)
+### Production Deployment
 
-The platform:
-
-1. Detects important financial sections
-2. Creates vector embeddings
-3. Stores them in ChromaDB
-4. Retrieves relevant context
-5. Uses GPT-4o to generate accurate answers
+* Dockerized Application
+* AWS EC2 Hosting
+* AWS S3 Frontend
+* Public REST APIs
+* Persistent ChromaDB Storage
 
 ---
 
-### Confidence Scoring
+# 🏗️ System Architecture
 
-Each extraction includes:
+```mermaid
+flowchart TD
 
-- Confidence Score
-- Review Flag
-- Validation Layer
+A[User Browser]
 
-to improve reliability and data quality.
+A --> B[AWS S3 Frontend]
 
----
+B --> C[FastAPI Backend]
 
-## Architecture
+C --> D[PDF Upload]
 
-```text
-┌──────────────────────────┐
-│      User Browser        │
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│ AWS S3 Static Frontend   │
-│ HTML + CSS + JavaScript  │
-└────────────┬─────────────┘
-             │ REST API
-             ▼
-┌──────────────────────────┐
-│ FastAPI Backend (EC2)    │
-│ Docker Container         │
-└────────────┬─────────────┘
-             │
-             ▼
-      PDF Upload
-             │
-             ▼
-┌──────────────────────────┐
-│ PyMuPDF Parser           │
-│ PDF Text Extraction      │
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│ Financial Statement      │
-│ Detection Engine         │
-└────────────┬─────────────┘
-             │
-             ├──────────────► GPT-4o
-             │                Financial
-             │                Metric Extraction
-             │
-             ▼
-┌──────────────────────────┐
-│ Financial Sections       │
-│ Operations              │
-│ Balance Sheet           │
-│ Cash Flow               │
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│ OpenAI Embeddings        │
-│ text-embedding-3-small   │
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│ ChromaDB Vector Store    │
-│ Semantic Search          │
-└────────────┬─────────────┘
-             │
-             ▼
-┌──────────────────────────┐
-│ GPT-4o RAG Engine        │
-│ Question Answering       │
-└──────────────────────────┘
+D --> E[PyMuPDF Parser]
+
+E --> F[Financial Statement Detection]
+
+F --> G[GPT-4o Financial Extraction]
+
+F --> H[Financial Sections]
+
+H --> I[OpenAI Embeddings]
+
+I --> J[ChromaDB Vector Store]
+
+J --> K[RAG Retrieval Engine]
+
+K --> L[GPT-4o Question Answering]
+
+L --> A
 ```
 
 ---
 
-## End-to-End Workflow
+# 🧠 RAG Architecture
 
-```text
-PDF Upload
-    ↓
-PDF Parsing
-    ↓
-Financial Statement Detection
-    ↓
-GPT-4o Metric Extraction
-    ↓
-Schema Validation
-    ↓
-Confidence Scoring
-    ↓
-OpenAI Embeddings
-    ↓
-ChromaDB Vector Storage
-    ↓
-Natural Language Questions
-    ↓
-Semantic Retrieval
-    ↓
-GPT-4o Response Generation
+```mermaid
+flowchart LR
+
+A[Financial PDF]
+
+A --> B[PDF Parsing]
+
+B --> C[Financial Sections]
+
+C --> D[OpenAI Embeddings]
+
+D --> E[ChromaDB]
+
+F[User Question]
+
+F --> G[Query Embedding]
+
+G --> E
+
+E --> H[Relevant Context]
+
+H --> I[GPT-4o]
+
+I --> J[Financial Answer]
 ```
 
 ---
 
-## Technology Stack
+# ☁️ AWS Production Architecture
 
-### Frontend
+```mermaid
+flowchart TD
 
-- HTML
-- CSS
-- JavaScript
-- AWS S3 Static Website Hosting
+A[AWS S3 Static Website]
 
-### Backend
+A --> B[AWS EC2 Ubuntu Server]
 
-- Python
-- FastAPI
+subgraph Docker Container
 
-### AI & LLM
+B --> C[FastAPI]
 
-- GPT-4o
-- OpenAI API
-- Prompt Engineering
+C --> D[PyMuPDF]
 
-### Vector Database
+C --> E[GPT-4o]
 
-- ChromaDB
+C --> F[OpenAI Embeddings]
 
-### Embeddings
+C --> G[ChromaDB]
 
-- OpenAI text-embedding-3-small
-
-### Document Processing
-
-- PyMuPDF
-
-### Deployment
-
-- Docker
-- AWS EC2
-- AWS S3
+end
+```
 
 ---
 
-## Demo Screenshot
+# 🔄 End-to-End Workflow
 
-> Upload a screenshot of the complete workflow and save it as:
+```mermaid
+flowchart TD
 
-```text
-screenshots/demo.png
+A[Upload Financial Report PDF]
+
+A --> B[PDF Parsing]
+
+B --> C[Financial Statement Detection]
+
+C --> D[GPT-4o Metric Extraction]
+
+D --> E[Schema Validation]
+
+E --> F[Confidence Scoring]
+
+F --> G[Financial Section Extraction]
+
+G --> H[OpenAI Embeddings]
+
+H --> I[ChromaDB Storage]
+
+J[User Question]
+
+J --> K[Query Embedding]
+
+K --> I
+
+I --> L[Semantic Retrieval]
+
+L --> M[Relevant Financial Context]
+
+M --> N[GPT-4o Response Generation]
+
+N --> O[Financial Insight Returned]
 ```
 
-Then GitHub will render it automatically:
+---
+
+# 📸 Demo
 
 ![Financial RAG Demo](screenshots/demo.png)
 
 ---
 
-## Example Extraction Output
+# 🛠️ Technology Stack
+
+## Frontend
+
+* HTML
+* CSS
+* JavaScript
+* AWS S3
+
+### Backend
+
+* Python
+* FastAPI
+* Pydantic
+
+### AI & LLM
+
+* GPT-4o
+* OpenAI API
+* Prompt Engineering
+
+### Embeddings
+
+* OpenAI text-embedding-3-small
+
+### Vector Database
+
+* ChromaDB
+
+### Document Processing
+
+* PyMuPDF
+
+### Infrastructure
+
+* Docker
+* AWS EC2
+* AWS S3
+* Ubuntu Linux
+
+---
+
+# 📡 API Endpoints
+
+## Health Check
+
+```http
+GET /
+```
+
+---
+
+## Financial Extraction
+
+```http
+POST /extract
+```
+
+Upload a Financial PDF and receive structured financial metrics.
+
+---
+
+## Question Answering
+
+```http
+POST /ask
+```
+
+Example:
 
 ```json
 {
-  "company_name": "Apple Inc.",
-  "fiscal_year": 2024,
-  "revenue": 391035,
-  "gross_margin": 180683,
-  "operating_income": 123216,
-  "net_income": 93736,
-  "total_assets": 364980,
-  "total_liabilities": 308030,
-  "shareholders_equity": 56950,
-  "cash_and_cash_equivalents": 29943,
-  "confidence_score": 1.0
+  "question": "What was Apple's revenue in 2024?"
 }
 ```
 
 ---
 
-## Example Questions
+# 📂 Project Structure
 
 ```text
-What was Apple's revenue in 2024?
+Financial-Document-Extraction-RAG
 
-What were total liabilities in 2024?
-
-What was shareholder equity in 2024?
-
-How much cash was used in financing activities?
-
-What was Apple's net income?
+├── app
+│   ├── extractor.py
+│   ├── rag.py
+│   ├── pdf_parser.py
+│   ├── confidence.py
+│   ├── validator.py
+│   ├── repository.py
+│   ├── database.py
+│   └── main.py
+│
+├── frontend
+│   ├── index.html
+│   ├── style.css
+│   └── app.js
+│
+├── chroma_db
+├── screenshots
+│   └── demo.png
+│
+├── Dockerfile
+├── requirements.txt
+└── README.md
 ```
 
 ---
 
-## Project Highlights
+# 🎯 Key Achievements
 
-- End-to-End AI Application
-- Financial Document Intelligence
-- Retrieval Augmented Generation (RAG)
-- OpenAI Embeddings
-- Vector Search
-- GPT-4o Integration
-- FastAPI REST APIs
-- Dockerized Deployment
-- AWS Cloud Deployment
-- Production Ready Architecture
-
----
-
-## Future Enhancements
-
-- Multi-Document Support
-- Multi-Company Analysis
-- Financial Trend Visualization
-- Historical KPI Comparisons
-- Pinecone Vector Database
-- User Authentication
-- Role-Based Access Control
-- Advanced Analytics Dashboard
+* Built an End-to-End Financial Intelligence Platform
+* Developed GPT-4o powered Financial Metric Extraction
+* Implemented Retrieval-Augmented Generation (RAG)
+* Integrated OpenAI Embeddings with ChromaDB
+* Developed Semantic Search over Financial Statements
+* Built Natural Language Financial Question Answering
+* Containerized using Docker
+* Deployed Backend on AWS EC2
+* Hosted Frontend on AWS S3
+* Implemented Validation & Confidence Scoring Pipelines
+* Solved Real-World Deployment Challenges involving Docker, AWS Networking, CORS, OpenAI APIs, and Vector Database Persistence
 
 ---
 
-## Deployment
+# 🔮 Future Enhancements
 
-### Backend
-
-AWS EC2 + Docker
-
-### Frontend
-
-AWS S3 Static Website Hosting
-
-### AI Services
-
-OpenAI GPT-4o + OpenAI Embeddings
-
-### Vector Database
-
-ChromaDB
+* Multi-Document Support
+* Multi-Company Analysis
+* Historical Financial Trends
+* Financial Dashboard & Visualizations
+* Pinecone Integration
+* Authentication & Authorization
+* Role-Based Access Control
+* Financial Analytics Engine
 
 ---
 
-## Author
+# 📈 Project Status
 
-**Ajay Kumar Sathri**
+### Version 1.0
 
-AI / ML Engineer | Generative AI Developer | Full Stack Engineer
+✅ Production Deployed
 
-Built as part of an end-to-end Generative AI portfolio focused on:
+✅ AWS Hosted
 
-- LLM Applications
-- Retrieval Augmented Generation
-- AI Agents
-- Cloud-Native AI Systems
-- Production AI Deployment
+✅ Dockerized
+
+✅ GPT-4o Integrated
+
+✅ RAG Enabled
+
+✅ OpenAI Embeddings
+
+✅ ChromaDB Vector Search
+
+✅ Portfolio Ready
+
+---
+
+# 👨‍💻 Author
+
+### Ajay Kumar Sathri
+
+AI Engineer | Generative AI | Machine Learning | Full Stack Development
+
+GitHub:
+https://github.com/ajaysathriai-afk
+
+---
+
+⭐ If you found this project useful, consider giving it a star.
